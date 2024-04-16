@@ -33,14 +33,14 @@ def cell_style(ws, bg_color, current_row,
 # تعديل عرض الاعمدة
 def adjust_col_width(ws):
     ws.column_dimensions['A'].width = 10
-    ws.column_dimensions['B'].width = 17
-    ws.column_dimensions['C'].width = 17
-    ws.column_dimensions['D'].width = 10
+    ws.column_dimensions['B'].width = 15
+    ws.column_dimensions['C'].width = 10
+    ws.column_dimensions['D'].width = 23
     ws.column_dimensions['E'].width = 10
     ws.column_dimensions['F'].width = 10
-    ws.column_dimensions['G'].width = 23
-    ws.column_dimensions['H'].width = 10
-    ws.column_dimensions['I'].width = 15
+    ws.column_dimensions['G'].width = 10
+    ws.column_dimensions['H'].width = 17
+    ws.column_dimensions['I'].width = 17
     ws.column_dimensions['J'].width = 10
 
 def init():
@@ -60,7 +60,7 @@ def init():
     observer_dict = {}
 
     # البيانات الاضافيةالمدخلة يدويا 
-    alramyat = ["الرمية الأولى - 1","الرمية الثانية - 2","الرمية الثالثة - 3","الرمية الرابعة - 4"]
+    alramyat = ["الرمية الأولى - 1","الرمية الثانية - 2", "الرمية الثالثة - 3","الرمية الرابعة - 4"]
     # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 
     # 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 
     # 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 
@@ -69,9 +69,9 @@ def init():
     # 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 501,
     # 502, 503, 504, 701, 702, 703, 704, 705, 706, 707, 777]
 
-    table_headings = ["اسم المراقب","اسم المشرف","اسم المعاون",
-                    'عدد الحجاج',"اوقات التفويج","يوم التفويج",
-                    "الفوج","#","الرمية","رقم المركز"]
+    table_headings = ["رقم المركز","الرمية","#",
+                    "الفوج","يوم التفويج","اوقات التفويج"
+                    ,"عدد الحجاج","اسم المعاون","اسم المشرف","اسم المراقب"]
 
     # csv مجلد ملف ال 
     csv_path = "Result CSV//"
@@ -119,21 +119,22 @@ def init():
                         adjust_col_width(ws)
                                 
                     continue    
-                # اضافة المعلومات المدخلة يدويا
+                # اضافة المعلومات المدخلة خلية بخلية
                 row_count+=1
-                row.insert(0, "")
-                row.insert(1, supervisor_dict[station_number] if supervisor_dict[station_number] is not None  else "")
-                row.insert(2, associate_dict[station_number] if associate_dict[station_number] is not None else "")
-                row.append(alramyat[alramyh])
-                row.append(station_number)  
+                row.reverse()
+                row.insert(0,station_number)  
+                row.insert(1,alramyat[alramyh])
+                row.insert(7, associate_dict[station_number] if associate_dict[station_number] is not None else "")
+                row.insert(8, supervisor_dict[station_number] if supervisor_dict[station_number] is not None  else "")
+                row.insert(9, "")
                 ws.append(row)
                 cell_style(ws, alramyat_colors[alramyh], row_count)
-        
+                
             tab = Table(displayName="Table1", ref="A1:J"+str(row_count))
             ws.add_table(tab)
         wb.save(f'{xl_path}{pdf_name}.xlsx')
 
-stations = [1,2,3,4,5,6,9,"777B"]
+stations = [2]#[1,2,3,4,5,6,9,"777B"]
 alramyat_colors = ["C6E0B4","BDD7EE","FFE699","F8CBAD"]
     
 if(__name__ == "__main__"):
